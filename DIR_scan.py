@@ -7,6 +7,7 @@ from urllib import quote
 import optparse
 class main(object):
     def __init__(self):
+        self.ptr = 0
         self.path = []
         self.types = ['PHP','ASP','JSP','ASPX']
         self.result = {}
@@ -29,14 +30,14 @@ class main(object):
         print len(self.path)
 #Have one request
     def req_one(self,host):
-        while len(self.path)>0:
+        while len(self.path)>self.ptr:
             path = quote(random.choice(self.path))
             url = host+'/'+path
             req = requests.get(url,timeout=3)
             if req.status_code != 404:
                 self.result[host+path] = req.status_code
                 print '[+]%s----%s' % (url,req.status_code)
-        self.path.remove(path)
+        self.ptr+=1
 
     def print_res(self):
         print self.result
